@@ -37,11 +37,9 @@ pipeline {
                 CANARY_REPLICAS = 1
             }
             steps {
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh 'kubectl apply -f train-schedule-kube-canary.yml'
+                 }
             }
         }
         stage('DeployToProduction') {
