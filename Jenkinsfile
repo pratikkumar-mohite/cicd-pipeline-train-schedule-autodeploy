@@ -53,10 +53,14 @@ pipeline {
                 //input 'Deploy to Production?'
                 //milestone(1)
                 withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh "sed -i 's/\$CANARY_REPLICAS/$CANARY_REPLICAS/g' train-schedule-kube-canary.yml"
+                    sh "sed -i 's/\$BUILD_NUMBER/$BUILD_NUMBER/g' train-schedule-kube-canary.yml"
                     sh 'kubectl apply -f train-schedule-kube-canary.yml'
                     
                  }
                 withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh "sed -i 's/\$CANARY_REPLICAS/$CANARY_REPLICAS/g' train-schedule-kube-canary.yml"
+                    sh "sed -i 's/\$BUILD_NUMBER/$BUILD_NUMBER/g' train-schedule-kube-canary.yml"
                     sh 'kubectl apply -f train-schedule-kube.yml'
                     
                  }
