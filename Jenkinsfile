@@ -38,9 +38,8 @@ pipeline {
             }
             steps {
                 withKubeConfig([credentialsId: 'kubeconfig']) {
-                    sh 'echo $CANARY_REPLICAS'
                     sh "sed -i 's/\$CANARY_REPLICAS/$CANARY_REPLICAS/g' train-schedule-kube-canary.yml"
-                    sh "sed -i 's/\$DOCKER_IMAGE_NAME:\$BUILD_NUMBER/$DOCKER_IMAGE_NAME:$BUILD_NUMBER/g' train-schedule-kube-canary.yml"
+                    sh "sed -i 's/\$BUILD_NUMBER/$BUILD_NUMBER/g' train-schedule-kube-canary.yml"
                     sh 'kubectl apply -f train-schedule-kube-canary.yml'
                     //sh 'kubectl config get-contexts'
                  }
