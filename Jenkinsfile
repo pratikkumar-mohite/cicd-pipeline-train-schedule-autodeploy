@@ -39,7 +39,7 @@ pipeline {
             steps {
                 withKubeConfig([credentialsId: 'kubeconfig']) {
                     //sh 'kubectl apply -f train-schedule-kube-canary.yml'
-                    sh 'kubectl config get-contexts'
+                    sh 'kubectl get ns'
                  }
             }
         }
