@@ -38,8 +38,8 @@ pipeline {
             }
             steps {
                 withKubeConfig([credentialsId: 'kubeconfig']) {
-                    //sh 'kubectl apply -f train-schedule-kube-canary.yml'
-                    sh 'kubectl config get-contexts'
+                    sh 'kubectl apply -f train-schedule-kube-canary.yml'
+                    //sh 'kubectl config get-contexts'
                  }
             }
         }
@@ -48,18 +48,17 @@ pipeline {
                 CANARY_REPLICAS = 0
             }
             steps {
-                input 'Deploy to Production?'
-                milestone(1)
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube.yml',
-                    enableConfigSubstitution: true
-                )
+                //input 'Deploy to Production?'
+                //milestone(1)
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh 'kubectl apply -f train-schedule-kube-canary.yml'
+                    
+                 }
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh 'kubectl apply -f train-schedule-kube.yml'
+                    
+                 }
+            
             }
         }
     }
